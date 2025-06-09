@@ -14,7 +14,7 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "http://127.0.0.1:5500",
-    # Add your production site domain here, e.g., "https://seujogo.com"
+    "https://beatriz-farias.github.io/processamento-de-voz/"
 ]
 
 app.add_middleware(
