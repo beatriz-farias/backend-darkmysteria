@@ -64,7 +64,8 @@ def text_to_audio_bytes(text: str) -> bytes:
         command = [
             piper_executable_path,
             '--model', piper_voice_model,
-            '--output-raw'
+            '--output-raw',
+            '--espeak-data', '/usr/share/espeak-ng-data'
         ]
 
         # Use subprocess.Popen para chamar o executável
