@@ -6,6 +6,8 @@ import shutil
 import base64 # Needed for Base64 encoding
 from dotenv import load_dotenv
 
+from riddles import get_first_riddle_id, get_riddle_by_id
+
 load_dotenv()
 
 app = FastAPI()
@@ -54,6 +56,15 @@ async def ask_ai_audio(
     finally:
         if os.path.exists(temp_audio_path):
             os.remove(temp_audio_path)
+
+@app.get("/get_initial_riddle")
+async def get_initial_riddle():
+    first_riddle_id = get_first_riddle_id()
+    if not first_riddle_id:
+        raise HTTPException(status_code=404, detail="Nenhuma charada encontrada.")
+    riddle = get_riddle_by_id(first_riddle_id)
+    return {"riddle_id": riddle['id'], "riddle_text": riddle['text']}
+
 
 @app.get("/")
 async def read_root():
