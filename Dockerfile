@@ -32,9 +32,7 @@ ENV PIPER_SAMPLE_RATE="22050"
 COPY . .
 
 RUN ln -s /app/voices/libpiper_phonemize.so.1.2.0 /app/voices/libpiper_phonemize.so.1 && \
-    # Se você vir outros erros de '.so' faltando no futuro, adicione-os aqui.
-    # Por exemplo, se precisar de libespeak-ng.so.1 (para piper) e tiver libespeak-ng.so.1.x.x
-RUN ln -s /app/voices/libespeak-ng.so.1.52.0.1 /app/voices/libespeak-ng.so.1
+    ln -s /app/voices/libespeak-ng.so.1.52.0.1 /app/voices/libespeak-ng.so.1
 
 # --- MOVIDO: Tornar o executável do Piper executável ---
 # Agora, esta linha vem DEPOIS que o 'piper' executável já foi copiado para /app/voices.
