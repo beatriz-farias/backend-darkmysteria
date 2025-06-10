@@ -47,4 +47,4 @@ RUN chmod +x ${PIPER_EXECUTABLE_PATH}
 # 7. Definir o comando para iniciar a aplicação
 #    Uvicorn precisa de 0.0.0.0 para ouvir conexões de fora do contêiner.
 #    $PORT é uma variável de ambiente que o Render injeta automaticamente.
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "$PORT"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
