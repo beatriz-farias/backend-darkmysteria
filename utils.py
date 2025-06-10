@@ -59,14 +59,18 @@ def text_to_audio_bytes(text: str) -> bytes:
         print("ERRO: Variáveis de ambiente PIPER_EXECUTABLE_PATH ou PIPER_VOICE_MODEL não configuradas.")
         return b""
 
+    piper_espeak_data_path = os.getenv("PIPER_ESPEAK_DATA_PATH")
+
     try:
-        # Comando para rodar Piper
         command = [
             piper_executable_path,
             '--model', piper_voice_model,
-            '--output-raw',
-            '--espeak-data', '/usr/share/espeak-ng-data'
+            '--output-raw'
         ]
+
+        # --- NOVO: Adicionar o argumento --espeak-data APENAS SE A VARIÁVEL ESTIVER DEFINIDA ---
+        if piper_espeak_data_path:
+            command.extend(['--espeak-data', piper_espeak_data_path])
 
         # Use subprocess.Popen para chamar o executável
         process = subprocess.Popen(
