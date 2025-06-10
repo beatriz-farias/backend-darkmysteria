@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Remova 'espeak' daqui se você tiver certeza que pyttsx3 não o usará mais
 # e quiser uma imagem menor. Mas para garantir, podemos deixá-lo.
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg espeak && \ 
+    apt-get install -y --no-install-recommends ffmpeg espeak-ng && \ 
     rm -rf /var/lib/apt/lists/*
 
 # 6. Copiar o restante do código da aplicação para o contêiner
@@ -27,8 +27,8 @@ COPY . .
 
 # --- NOVO: Definir variáveis de ambiente para o Piper ---
 # Estes são os caminhos DENTRO do contêiner onde o Piper estará.
-ENV PIPER_EXECUTABLE_PATH="/app/voices/piper"
-ENV PIPER_VOICE_MODEL="/app/voices/pt_BR-faber-medium.onnx"
+ENV PIPER_EXECUTABLE_PATH="/voices/piper"
+ENV PIPER_VOICE_MODEL="/voices/pt_BR-faber-medium.onnx"
 ENV PIPER_SAMPLE_RATE="22050" 
 
 # --- NOVO: Tornar o executável do Piper executável ---
