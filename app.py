@@ -27,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/ask_ai_audio")
+@app.post("ask_ai_audio")
 async def ask_ai_audio(
     audio_file: UploadFile = File(...),
     riddle: str = Form(...),
@@ -57,7 +57,7 @@ async def ask_ai_audio(
         if os.path.exists(temp_audio_path):
             os.remove(temp_audio_path)
 
-@app.get("/get_initial_riddle")
+@app.get("get_initial_riddle")
 async def get_initial_riddle():
     first_riddle_id = get_first_riddle_id()
     if not first_riddle_id:
@@ -66,6 +66,6 @@ async def get_initial_riddle():
     return {"riddle_id": riddle['id'], "riddle_text": riddle['text']}
 
 
-@app.get("/")
+@app.get("")
 async def read_root():
     return {"message": "API do Jogo de Horror Stories com IA (Áudio) está online!"}
