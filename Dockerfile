@@ -34,7 +34,7 @@ COPY . .
 #    Render irá usar isso como o comando de início.
 #    Uvicorn precisa de 0.0.0.0 para ouvir conexões de fora do contêiner
 #    $PORT é uma variável de ambiente que o Render injeta automaticamente
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "$PORT"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 
 # NOTA: Certifique-se de que o seu requirements.txt esteja limpo,
 # e não inclua pacotes específicos do Windows como pywin32.
