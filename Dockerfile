@@ -39,7 +39,9 @@ COPY . .
 # Criamos links simbólicos da versão completa para o nome curto que o Piper procura.
 RUN ln -s /app/voices/libpiper_phonemize.so.1.2.0 /app/voices/libpiper_phonemize.so.1 && \
     ln -s /app/voices/libespeak-ng.so.1.52.0.1 /app/voices/libespeak-ng.so.1 
-    # ln -s /usr/lib/x86_64-linux-gnu/espeak-ng-data /usr/share/espeak-ng-data
+
+RUN ln -s /usr/lib/x86_64-linux-gnu/espeak-ng-data /usr/share/espeak-ng-data
+
 
 # --- NOVO: Tornar o executável do Piper executável ---
 # É essencial dar permissão de execução ao binário copiado.
