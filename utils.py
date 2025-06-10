@@ -79,7 +79,8 @@ def text_to_audio_bytes(text: str) -> bytes:
         command = [
             PIPER_EXECUTABLE_PATH_ENV,
             '--model', PIPER_VOICE_MODEL_ENV,
-            '--output-raw'
+            '--output-raw',
+            '--espeak-data', PIPER_ESPEAK_DATA_PATH_ENV
         ]
         
         # NOVO: Adicionar a flag --espeak-data SE a variável estiver definida
