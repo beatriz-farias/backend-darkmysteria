@@ -1,7 +1,6 @@
 # Dockerfile
 
-# 1. Imagem base: Escolha uma imagem oficial do Python com uma versão Linux
-#    Python 3.11 é uma boa escolha, já que você usou 3.11.11 no Render
+# 1. Imagem base:
 FROM python:3.11-slim-bookworm
 
 # 2. Definir variáveis de ambiente para a aplicação Python
@@ -9,34 +8,32 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 # 3. Definir o diretório de trabalho dentro do contêiner
-#    É para onde seu código será copiado
 WORKDIR /app
 
 # 4. Copiar o arquivo de requisitos e instalar as dependências Python
-#    Isso aproveita o cache do Docker. Se requirements.txt não mudar, este passo é rápido.
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Instalar pacotes de sistema necessários (ffmpeg e espeak)
-#    - apt-get update: Atualiza a lista de pacotes
-#    - apt-get install -y: Instala os pacotes
-#    - --no-install-recommends: Evita a instalação de pacotes recomendados desnecessários
-#    - rm -rf /var/lib/apt/lists/*: Limpa o cache apt para manter a imagem pequena
+# --- NOVO: Instalar eSpeak (ainda é bom ter para fallback se pyttsx3 usar) ---
+# E os pacotes de sistema necessários como ffmpeg.
+# Remova 'espeak' daqui se você tiver certeza que pyttsx3 não o usará mais
+# e quiser uma imagem menor. Mas para garantir, podemos deixá-lo.
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg espeak && \
+    apt-get install -y --no-install-recommends ffmpeg espeak && \ 
     rm -rf /var/lib/apt/lists/*
 
 # 6. Copiar o restante do código da aplicação para o contêiner
-#    O '.' no final significa copiar tudo do diretório atual do host para /app no contêiner
 COPY . .
 
-# 7. Definir o comando para iniciar a aplicação
-#    Render irá usar isso como o comando de início.
-#    Uvicorn precisa de 0.0.0.0 para ouvir conexões de fora do contêiner
-#    $PORT é uma variável de ambiente que o Render injeta automaticamente
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# --- NOVO: Definir variáveis de ambiente para o Piper ---
+# Estes são os caminhos DENTRO do contêiner onde o Piper estará.
+ENV PIPER_EXECUTABLE_PATH="/app/voices/piper"
+ENV PIPER_VOICE_MODEL="/app/voices/pt_BR-faber-medium.onnx"
+ENV PIPER_SAMPLE_RATE="22050" 
 
-# NOTA: Certifique-se de que o seu requirements.txt esteja limpo,
-# e não inclua pacotes específicos do Windows como pywin32.
-# Certifique-se de que seu código utils.py NÃO está procurando por piper.exe
-# Se você está usando pyttsx3, ele usará o 'espeak' que será instalado aqui.
+# --- NOVO: Tornar o executável do Piper executável ---
+# É essencial no Linux dar permissão de execução ao binário que copiamos.
+RUN chmod +x ${PIPER_EXECUTABLE_PATH}
+
+# 7. Definir o comando para iniciar a aplicação
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
