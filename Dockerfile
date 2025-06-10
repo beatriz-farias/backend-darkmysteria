@@ -19,14 +19,13 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg espeak-ng espeak-ng-data && \ 
     rm -rf /var/lib/apt/lists/*
 
-RUN cp /usr/lib/aarch64-linux-gnu/espeak-ng-data/phontab /usr/share/espeak-ng-data/
+RUN PHONTAB_PATH=$(find /usr/share /usr/lib -name "phontab" 2>/dev/null | head -n 1) && \
+    if [ -z "$PHONTAB_PATH" ]; then \
+        echo "!!!! ERRO CRÍTICO: 'phontab' não encontrado em /usr/share ou /usr/lib após instalação de espeak-ng-data !!!!" && exit 1; \
+    else \
+        echo "!!!! CAMINHO DE 'phontab' ENCONTRADO: $PHONTAB_PATH !!!!" && true; \
+    fi
 
-RUN ls -l /usr/share/espeak-ng-data/phontab || echo "phontab not found in ls /usr/share/espeak-ng-data/phontab" && \
-    ls -l /usr/share/espeak-ng-data || echo "espeak-ng-data dir not found" && \
-    find /usr/share/espeak-ng-data -name "phontab" || echo "phontab not found using find" && \
-    # Se 'phontab' está lá, tente copiar para /tmp para ver se o problema é de permissão.
-    cp /usr/share/espeak-ng-data/phontab /tmp/phontab_test || echo "Could not copy phontab for testing permissions"
-    
 # --- NOVO: Definir variáveis de ambiente para o Piper ---
 # Estes são os caminhos DENTRO do contêiner onde o Piper estará.
 # Eles podem ficar aqui em cima, pois são apenas definições de variáveis.
