@@ -1,9 +1,8 @@
+import subprocess
 import speech_recognition as sr
 from pydub import AudioSegment
-import pyttsx3 
 import os
 import io
-import tempfile
 
 def convert_audio_to_wav(audio_file_path: str) -> io.BytesIO:
     try:
