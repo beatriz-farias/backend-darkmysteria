@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 5. Instalar pacotes de sistema necessários (ffmpeg e espeak-ng)
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ffmpeg espeak-ng && \
+    apt-get install -y --no-install-recommends ffmpeg espeak-ng espeak-ng-data && \ 
     rm -rf /var/lib/apt/lists/*
 
 # --- NOVO: Definir variáveis de ambiente para o Piper ---
